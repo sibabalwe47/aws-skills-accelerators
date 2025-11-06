@@ -14,3 +14,7 @@ variable "aws_skills_accelerator_groups" {
     "AWSSkillsAcceleratorAIAgentsCohort"
   ]
 }
+
+variable "aws_skills_accelerator_group_name" {
+  default = "AWSSkillsAcceleratorContainersCohort"
+}
