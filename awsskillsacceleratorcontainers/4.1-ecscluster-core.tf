@@ -1,6 +1,12 @@
 resource "aws_ecs_cluster" "ks_ecs_cluster" {
+  /*
+   *  Cluster name
+   */
   name = "${local.project_name}-cluster"
 
+  /*
+   *  Cluster configuration
+   */
   configuration {
     execute_command_configuration {
       logging = "OVERRIDE"
@@ -11,6 +17,9 @@ resource "aws_ecs_cluster" "ks_ecs_cluster" {
     }
   }
 
+  /*
+   *  Cluster configuration
+   */
   setting {
     name  = "containerInsights"
     value = "enabled"

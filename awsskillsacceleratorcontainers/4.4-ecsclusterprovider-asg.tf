@@ -1,5 +1,9 @@
 /*
- * Dependencies: EC2 Kep pair, AMI ID, userdata.tpl
+    Resource: Autoscaling Group
+    
+    Description: Creates an autoscaling group that will be used as capacity provider. ECS managed 
+    scaling rules to ensure that provider has the necessary resources capacity required by 
+    tasks (containers) running in the cluster.
  */
 
 module "ks_autoscaling_group" {
@@ -48,7 +52,7 @@ module "ks_autoscaling_group" {
   /*
    *  Userdata at EC2 init
    */
-  user_data = base64encode(templatefile("${path.module}/1.5.4-ecsclusterprovideruserdata.tpl", {
+  user_data = base64encode(templatefile("${path.module}/4.2-ecsclusterprovideruserdata.tpl", {
     ECS_CLUSTER_NAME = "${aws_ecs_cluster.ks_ecs_cluster.name}"
     TAGS             = local.default_tags
   }))

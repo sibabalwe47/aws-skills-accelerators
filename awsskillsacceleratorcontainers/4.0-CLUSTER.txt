@@ -1,0 +1,7 @@
+/*
+    Section 3: DNS Configuration with Route53
+
+    3.1 - Route53 Public hosted zone & Default A Record
+    1.1.2 - SSL Certificates with ACM
+
+ */

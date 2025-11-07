@@ -1,7 +1,3 @@
-resource "random_id" "this" {
-  byte_length = 8
-}
-
 resource "aws_security_group" "security_group" {
   name        = "${local.project_name}-asg-sg"
   description = "EC2 security group for Autoscaling group instances."

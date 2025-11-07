@@ -1,3 +1,10 @@
+/*
+    Resource: Project Variables
+    Description: Global variables, naming conventions, and settings used
+    throughout the project
+ */
+
+
 locals {
   /*
    *  AWS Selected region
@@ -23,13 +30,6 @@ locals {
   azs = slice(sort(data.aws_availability_zones.this.names), 0, 3)
 
   /*
-   *  Availability zones suffix for naming convention
-   */
-  az_suffix = {
-    for az in local.azs : az => element(split("-", az), length(split("-", az)) - 1)
-  }
-
-  /*
       Create one /24 per AZ in region: add 2 bits -> /24
    */
   az_blocks = [for k, _ in local.azs : cidrsubnet(local.vpc_cidr, 2, k)]
@@ -48,14 +48,24 @@ locals {
 
 
   /*
-      (optional) spare per AZ if you ever needed:
+   * (optional) spare per AZ if you ever needed:
    */
   spare_per_az = [for b in local.az_blocks : cidrsubnet(b, 3, 7)] # /27 at .224
 
   /*
-      (optional) whole VPC spare /24 (the 4th /24 inside the /22)
-    */
+   * (optional) whole VPC spare /24 (the 4th /24 inside the /22)
+   */
   spare_vpc_block = cidrsubnet(local.vpc_cidr, 2, 3)
+
+  /*
+   * ECR Private repository names
+   */
+  car_platform_ecr_repositories = [
+    "${local.project_name}-crm",
+    "${local.project_name}-website",
+    "${local.project_name}-marketing-automation",
+    "${local.project_name}-backend-aggregator"
+  ]
 
 
   default_tags = {

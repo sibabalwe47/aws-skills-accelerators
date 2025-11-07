@@ -1,3 +1,9 @@
+
+/*
+    Resource: Certificate Manager
+    Description: Create an SSL certificate for the ALB used for routing
+    backend traffic, front traffic, and DNS validation with Route53.
+ */
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.9.0"
@@ -47,9 +53,7 @@ module "vpc" {
   default_vpc_enable_dns_support   = true
   map_public_ip_on_launch          = true
 
-  /*
-   *  NAT Gateway configuration
-   */
+
   tags = merge(local.default_tags, {})
 
 }

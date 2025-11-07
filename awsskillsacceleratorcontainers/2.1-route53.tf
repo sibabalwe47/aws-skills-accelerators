@@ -1,3 +1,10 @@
+/*
+    Resource: Route53
+    Description: Create a Route53 public hosted zone and make it the 
+    authoritative nameserver for the domain - awsmasterscircle.co.za
+ */
+
+
 resource "aws_route53_zone" "ks_route53_public_hosted_zone" {
   name = "awsmasterscircle.co.za"
 }
