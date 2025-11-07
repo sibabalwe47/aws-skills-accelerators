@@ -19,7 +19,7 @@ resource "aws_vpc_endpoint" "s3_gateway" {
    */
   route_table_ids = module.vpc.private_route_table_ids
 
-  tags = merge({
+  tags = merge(local.default_tags, {
     Name = "${local.project_name}-network-s3-gateway"
-  }, local.default_tags)
+  })
 }

@@ -50,6 +50,6 @@ module "vpc" {
   /*
    *  NAT Gateway configuration
    */
-  tags = merge({}, local.default_tags)
+  tags = merge(local.default_tags, {})
 
 }
