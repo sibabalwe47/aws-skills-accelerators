@@ -19,9 +19,13 @@ locals {
   project_name = "${local.default_tags.OwnedBy}-car-platform"
 
   /*
+   * AMI ID for the cluster capacity provider
+   */
+  ecs_ami_al2_x86 = jsondecode(data.aws_ssm_parameter.ecs_ami_al2_x86.value).image_id
+
+  /*
    *  VPC CIDR
    */
-
   vpc_cidr = "10.0.0.0/20"
 
   /*
@@ -61,12 +65,22 @@ locals {
    * ECR Private repository names
    */
   car_platform_ecr_repositories = [
-    "${local.project_name}-crm",
-    "${local.project_name}-website",
-    "${local.project_name}-marketing-automation",
-    "${local.project_name}-backend-aggregator"
+    "crm",
+    "website",
+    "marketing-automation",
+    "backend-aggregator",
+    "cms"
   ]
 
+  /*
+   * ECS service naming convention
+   */
+  ecs_service_name_prefix = "car-dealership-platform"
+
+  /*
+   * SSM Parameter store naming convention
+   */
+  ssm_parameter_name_prefix = "/car-dealership-platform/sn"
 
   default_tags = {
     Project   = "AWSSkillsAcceleratorContainersOperations"

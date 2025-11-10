@@ -55,6 +55,14 @@ resource "aws_iam_policy" "TaskExecutionRoleForECSAgentPolicy" {
         Resource = [
           "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter/*"
         ]
+      },
+      {
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:rds!db-*"
       }
     ]
   })

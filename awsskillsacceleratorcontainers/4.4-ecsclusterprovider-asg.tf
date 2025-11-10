@@ -44,8 +44,8 @@ module "ks_autoscaling_group" {
   launch_template_name        = "${local.project_name}-lt"
   launch_template_description = "ECS autoscaling group launch template."
   update_default_version      = true
-  instance_type               = "t4g.small"
-  image_id                    = "ami-05ecb03ad89d910c0"
+  instance_type               = "t3.small"
+  image_id                    = local.ecs_ami_al2_x86
   ebs_optimized               = true
   enable_monitoring           = true
 
