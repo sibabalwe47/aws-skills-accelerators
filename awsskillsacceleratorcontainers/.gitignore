@@ -1,0 +1,49 @@
+# Terraform .terraform directory
+# Terraform: ignore working dirs anywhere
+**/.terraform/*
+# keep lockfiles tracked
+!**/.terraform.lock.hcl
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Terraform crash log files
+crash.log
+
+# Terraform variable definition files (containing sensitive data)
+*.tfvars
+*.tfvars.json
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform plan files
+*.tfplan
+
+# Terraform CLI configuration files
+.terraformrc
+terraform.rc
+
+# Local Terraform modules (if not intended for version control)
+# For example, if you have a 'modules' directory with local modules:
+# modules/
+
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+*.auto.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Keep the lock file (commit this)
+!**/.terraform.lock.hcl
