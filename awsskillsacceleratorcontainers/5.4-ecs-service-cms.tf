@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "cms_service_task_definition" {
    */
   container_definitions = templatefile("./5.3-td.json.tpl", {
     name                   = "${local.ecs_service_name_prefix}-cms-ms" //car-dealership-plaform-cms-ms
-    image                  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.region}.amazonaws.com/${local.project_name}/cms:b56bc12-2025-11-08-15-36"
+    image                  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.region}.amazonaws.com/${local.project_name}/cms:15fd81f-2025-11-11-12-45"
     essential              = true
     loggroup               = aws_cloudwatch_log_group.cms_service_log_group.name
     aws_region             = data.aws_region.current.region
@@ -70,6 +70,35 @@ resource "aws_ecs_task_definition" "cms_service_task_definition" {
       {
         name      = "DATABASE_NAME"
         valueFrom = "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_parameter_name_prefix}/rds/name"
+      },
+      {
+        name      = "APP_KEYS"
+        valueFrom = "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:cmscredentials-VQXftq:APP_KEYS::"
+      },
+      {
+        name      = "API_TOKEN_SALT"
+        valueFrom = "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:cmscredentials-VQXftq:API_TOKEN_SALT::"
+      },
+      {
+        name      = "ADMIN_JWT_SECRET"
+        valueFrom = "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:cmscredentials-VQXftq:ADMIN_JWT_SECRET::"
+      },
+      {
+        name      = "TRANSFER_TOKEN_SALT"
+        valueFrom = "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:cmscredentials-VQXftq:TRANSFER_TOKEN_SALT::"
+      },
+      {
+        name      = "ENCRYPTION_KEY"
+        valueFrom = "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:cmscredentials-VQXftq:ENCRYPTION_KEY::"
+      },
+      {
+        name      = "JWT_SECRET"
+        valueFrom = "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:cmscredentials-VQXftq:JWT_SECRET::"
+      },
+      // Todo: Add bucket name for storing cmd media to S3.
+      {
+        name      = "AWS_BUCKET"
+        valueFrom = "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_parameter_name_prefix}/cms/bucket"
       }
     ])
 
@@ -117,22 +146,40 @@ resource "aws_ecs_task_definition" "cms_service_task_definition" {
  */
 
 resource "aws_ecs_service" "cms_service" {
-  depends_on      = [aws_ecs_cluster.ks_ecs_cluster]
-  cluster         = aws_ecs_cluster.ks_ecs_cluster.name
-  name            = "${local.ecs_service_name_prefix}-cms-ms"
+  depends_on = [aws_ecs_cluster.ks_ecs_cluster]
+
+  /*
+   *  Cluster to attache service to
+   */
+  cluster = aws_ecs_cluster.ks_ecs_cluster.name
+
+  /*
+   *  Name of the ECS service
+   */
+  name = "${local.ecs_service_name_prefix}-cms-ms"
+
+  /*
+   *  Task definition (blueprint) for creating containers (tasks)
+   */
   task_definition = aws_ecs_task_definition.cms_service_task_definition.arn
-  launch_type     = "EC2"
-  desired_count   = 1
 
-  #   network_configuration {
-  #     subnets          = module.vpc.private_subnets
-  #     assign_public_ip = false
-  #     //security_groups  = [aws_security_group.fargate_security_group.id]
-  #   }
+  /*
+   *  Compute type for running the containers
+   */
+  launch_type = "EC2"
 
-  # load_balancer {
-  #   target_group_arn = module.alb_external.target_group_arns[0]
-  #   container_name   = "authentication"
-  #   container_port   = 4000
-  # }
+  /*
+   *  Number of service instance
+   */
+  desired_count = 1
+
+
+  /*
+   *  Number of service instance
+   */
+  load_balancer {
+    target_group_arn = module.alb.target_group_arns[0]
+    container_name   = "${local.ecs_service_name_prefix}-cms-ms"
+    container_port   = 1337
+  }
 }

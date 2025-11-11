@@ -24,7 +24,7 @@ resource "aws_iam_role" "TaskExecutionRoleForContainer" {
 
 resource "aws_iam_policy" "TaskExecutionRoleForContainerPolicy" {
   name        = "${local.project_name}-TaskExecutionRoleForContainerPolicy"
-  description = "IAM policies for the ECS Agent."
+  description = "IAM policies for the ECS Container."
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -32,7 +32,8 @@ resource "aws_iam_policy" "TaskExecutionRoleForContainerPolicy" {
         Action = [
           "s3:GetObject",
           "s3:ListBucket",
-          "s3:PutObject"
+          "s3:PutObject",
+          "s3:DeleteObject"
         ],
         Effect   = "Allow"
         Resource = "*"

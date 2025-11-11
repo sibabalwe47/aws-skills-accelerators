@@ -84,7 +84,7 @@ module "ks_autoscaling_group" {
       description                 = "eth0"
       associate_public_ip_address = false
       device_index                = 0
-      security_groups             = [aws_security_group.security_group.id]
+      security_groups             = [aws_security_group.security_group.id, module.alb.security_group_id]
     }
   ]
 

@@ -31,7 +31,7 @@ terraform.rc
 # Local Terraform modules (if not intended for version control)
 # For example, if you have a 'modules' directory with local modules:
 # modules/
-
+.env
 
 # Terraform
 **/.terraform/*

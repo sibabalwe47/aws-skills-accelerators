@@ -4,19 +4,11 @@ resource "aws_security_group" "security_group" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    description = "HTTPS ingress traffic."
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "HTTP ingress traffic."
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    description     = "HTTPS ingress traffic from ALB."
+    security_groups = [module.alb.security_group_id]
+    from_port       = 32768
+    to_port         = 65535
+    protocol        = "tcp"
   }
 
   egress {
@@ -35,12 +27,11 @@ resource "aws_security_group" "rds_db_security_group" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    description     = "HTTPS ingress traffic."
+    description     = "HTTPS ingress traffic from ECS containers."
     security_groups = [aws_security_group.security_group.id]
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
   }
 
 
