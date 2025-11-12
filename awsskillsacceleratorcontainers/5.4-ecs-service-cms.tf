@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "cms_service_task_definition" {
    */
   container_definitions = templatefile("./5.3-td.json.tpl", {
     name                   = "${local.ecs_service_name_prefix}-cms-ms" //car-dealership-plaform-cms-ms
-    image                  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.region}.amazonaws.com/${local.project_name}/cms:15fd81f-2025-11-11-12-45"
+    image                  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.region}.amazonaws.com/${local.project_name}/cms:6415dde-2025-11-11-19-11"
     essential              = true
     loggroup               = aws_cloudwatch_log_group.cms_service_log_group.name
     aws_region             = data.aws_region.current.region
@@ -99,6 +99,10 @@ resource "aws_ecs_task_definition" "cms_service_task_definition" {
       {
         name      = "AWS_BUCKET"
         valueFrom = "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_parameter_name_prefix}/cms/bucket"
+      },
+      {
+        name      = "AWS_REGION"
+        valueFrom = "arn:aws:ssm:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:parameter${local.ssm_parameter_name_prefix}/region"
       }
     ])
 
