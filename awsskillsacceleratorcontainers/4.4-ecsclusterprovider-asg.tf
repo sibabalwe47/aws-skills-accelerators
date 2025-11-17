@@ -22,9 +22,9 @@ module "ks_autoscaling_group" {
      - max size
      - desired capacity
    */
-  min_size         = 1
-  max_size         = 1
-  desired_capacity = 1
+  min_size         = 3
+  max_size         = 3
+  desired_capacity = 3
 
   /*
    * Instance health checks

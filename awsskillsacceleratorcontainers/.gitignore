@@ -1,6 +1,6 @@
 # Terraform .terraform directory
 # Terraform: ignore working dirs anywhere
-**/.terraform/*
+.terraform/*
 # keep lockfiles tracked
 !**/.terraform.lock.hcl
 

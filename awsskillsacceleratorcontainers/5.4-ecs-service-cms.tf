@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "cms_service_task_definition" {
    */
   container_definitions = templatefile("./5.3-td.json.tpl", {
     name                   = "${local.ecs_service_name_prefix}-cms-ms" //car-dealership-plaform-cms-ms
-    image                  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.region}.amazonaws.com/${local.project_name}/cms:6415dde-2025-11-11-19-11"
+    image                  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.region}.amazonaws.com/${local.project_name}/cms:eb0c7f0-2025-11-12-19-48"
     essential              = true
     loggroup               = aws_cloudwatch_log_group.cms_service_log_group.name
     aws_region             = data.aws_region.current.region
@@ -46,6 +46,14 @@ resource "aws_ecs_task_definition" "cms_service_task_definition" {
         "hostPort"      = 0
       },
     ])
+
+    environment = jsonencode([
+      {
+        name  = "NODE_OPTIONS"
+        value = "--max-old-space-size=768"
+      }
+    ])
+
     secrets = jsonencode([
       {
         name      = "DATABASE_USERNAME"
